@@ -20,8 +20,6 @@ Method | HTTP request | Description
 * Api Key Authentication (Authorization):
 
 ```python
-import time
-import os
 import agent
 from agent.models.agent_agent_entity import AgentAgentEntity
 from agent.models.agent_create_agent_request import AgentCreateAgentRequest
@@ -102,8 +100,6 @@ Name | Type | Description  | Notes
 * Api Key Authentication (Authorization):
 
 ```python
-import time
-import os
 import agent
 from agent.models.agent_agent_entity import AgentAgentEntity
 from agent.rest import ApiException
@@ -183,8 +179,6 @@ Name | Type | Description  | Notes
 * Api Key Authentication (Authorization):
 
 ```python
-import time
-import os
 import agent
 from agent.models.agent_list_agents_request import AgentListAgentsRequest
 from agent.models.agent_list_response import AgentListResponse
@@ -267,8 +261,6 @@ Name | Type | Description  | Notes
 * Api Key Authentication (Authorization):
 
 ```python
-import time
-import os
 import agent
 from agent.models.agent_agent_entity import AgentAgentEntity
 from agent.models.agent_update_agent_request import AgentUpdateAgentRequest

@@ -17,16 +17,12 @@ import pprint
 import re  # noqa: F401
 import json
 
-
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr
-from pydantic import Field
 from agent.models.list_request_filters import ListRequestFilters
 from agent.models.list_request_sort import ListRequestSort
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class AgentListAgentsRequest(BaseModel):
     """
@@ -36,13 +32,14 @@ class AgentListAgentsRequest(BaseModel):
     sorts: Optional[List[ListRequestSort]] = None
     filters_mask: Optional[StrictStr] = Field(default=None, alias="filtersMask")
     filters: Optional[ListRequestFilters] = None
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["pageToken", "sorts", "filtersMask", "filters"]
 
-    model_config = {
-        "populate_by_name": True,
-        "validate_assignment": True,
-        "protected_namespaces": (),
-    }
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
 
 
     def to_str(self) -> str:
@@ -55,7 +52,7 @@ class AgentListAgentsRequest(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of AgentListAgentsRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -68,27 +65,36 @@ class AgentListAgentsRequest(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of each item in sorts (list)
         _items = []
         if self.sorts:
-            for _item in self.sorts:
-                if _item:
-                    _items.append(_item.to_dict())
+            for _item_sorts in self.sorts:
+                if _item_sorts:
+                    _items.append(_item_sorts.to_dict())
             _dict['sorts'] = _items
         # override the default output from pydantic by calling `to_dict()` of filters
         if self.filters:
             _dict['filters'] = self.filters.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of AgentListAgentsRequest from a dict"""
         if obj is None:
             return None
@@ -98,10 +104,15 @@ class AgentListAgentsRequest(BaseModel):
 
         _obj = cls.model_validate({
             "pageToken": obj.get("pageToken"),
-            "sorts": [ListRequestSort.from_dict(_item) for _item in obj.get("sorts")] if obj.get("sorts") is not None else None,
+            "sorts": [ListRequestSort.from_dict(_item) for _item in obj["sorts"]] if obj.get("sorts") is not None else None,
             "filtersMask": obj.get("filtersMask"),
-            "filters": ListRequestFilters.from_dict(obj.get("filters")) if obj.get("filters") is not None else None
+            "filters": ListRequestFilters.from_dict(obj["filters"]) if obj.get("filters") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

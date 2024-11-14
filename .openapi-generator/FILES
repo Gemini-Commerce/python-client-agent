@@ -1,7 +1,6 @@
 .github/workflows/python.yml
 .gitignore
 .gitlab-ci.yml
-.openapi-generator-ignore
 .travis.yml
 README.md
 agent/__init__.py
@@ -46,17 +45,4 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_agent_agent_entity.py
-test/test_agent_api.py
-test/test_agent_create_agent_request.py
-test/test_agent_list_agents_request.py
-test/test_agent_list_response.py
-test/test_agent_sort_order.py
-test/test_agent_update_agent_request.py
-test/test_agent_update_payload.py
-test/test_list_request_filters.py
-test/test_list_request_sort.py
-test/test_protobuf_any.py
-test/test_rpc_status.py
-test/test_sort_sort_field.py
 tox.ini
